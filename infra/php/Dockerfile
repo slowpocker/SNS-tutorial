@@ -2,7 +2,7 @@
 #イメージビルドのためのベースイメージを設定する
 FROM php:8.0-fpm-buster
 
-#SHELL ["/bin/sh", "-c"] がデフォルト。必須ではない
+#SHELL ["/bin/sh", "-c"] がデフォルト。
 SHELL ["/bin/bash", "-oeux", "pipefail", "-c"]
 
 #ENV命令はコンテナ内のサーバー環境変数を設定する
