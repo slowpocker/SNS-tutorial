@@ -14,12 +14,13 @@ class CreateFollowersTable extends Migration
     public function up()
     {
         Schema::create('followers', function (Blueprint $table) {
-            $table->unsignedInteger('following_id')->comment('フォローしているユーザID');
-            $table->unsignedInteger('followed_id')->comment('フォローされているユーザID');
+            //自分自身はfollowing_id,フォローしているユーザはfollowed_idとする
+            $table->foreignId('following_id')->constrained('users')->comment('フォローしているユーザのID');
+            $table->foreignId('followed_id')->constrained('users')->comment('フォローされているユーザのID');
             $table->index('following_id');
             $table->index('followed_id');
 
-            //同じIDの登録を防ぐ
+            //以下の組み合わせを一意にして同じIDの登録を防ぐ
             $table->unique([
                 'following_id',
                 'followed_id'

@@ -27,4 +27,9 @@ Route::group(['middleware' => 'auth'], function() {
 
     // ユーザ関連
     Route::resource('users', UsersController::class, ['only' => ['index', 'show', 'edit', 'update']]);
+    // フォロー
+    Route::post('users/{user}/follow', 'UsersController@follow')->name('follow');
+    // フォロー解除
+    Route::delete('users/{user}/unfollow', 'UsersController@unfollow')->name('unfollow');
+
 });
