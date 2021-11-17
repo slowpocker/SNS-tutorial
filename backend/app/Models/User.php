@@ -82,13 +82,16 @@ class User extends Authenticatable
     public function isFollowing(Int $user_id)
     {
         //フォローしているuserを取得して、followed_idと$user_idが一致するものがあればtrue,なければfalseが戻り値となる
-        return (boolean) $this->follows()->where('followed_id', $user_id)->first(['id']);
+        //return (boolean) $this->follows()->where('followed_id', $user_id)->first(['id']);
+        return $this->follows()->where('followed_id', $user_id)->exists();
     }
 
     // 自分が相手からフォローされているか判定する
     public function isFollowed(Int $user_id)
     {
-        return (boolean) $this->followers()->where('following_id', $user_id)->first(['id']);
+        // return (boolean) $this->followers()->where('following_id', $user_id)->first(['id']);
+        return $this->followers()->where('following_id', $user_id)->exists();
+
     }
 
     public function updateProfile(Array $data)
