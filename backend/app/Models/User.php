@@ -90,4 +90,31 @@ class User extends Authenticatable
     {
         return (boolean) $this->followers()->where('following_id', $user_id)->first(['id']);
     }
+
+    public function updateProfile(Array $data)
+    {
+        if (isset($data['profile_image'])) {
+            //'profile_image'が空でなければプロフ画像を保存する
+            $file_name = $data['profile_image']->store('public/profile_image/');
+
+            $this::where('id', $this->id)
+                ->update([
+                    'screen_name'   => $data['screen_name'],
+                    'name'          => $data['name'],
+                    //basename($path)でパスからファイル名を取得する
+                    'profile_image' => basename($file_name),
+                    'email'         => $data['email'],
+                ]);
+        } else {
+            //空だった場合、image以外の情報を更新する
+            $this::where('id', $this->id)
+                ->update([
+                    'screen_name'   => $data['screen_name'],
+                    'name'          => $data['name'],
+                    'email'         => $data['email'],
+                ]);
+        }
+
+        return;
+    }
 }
