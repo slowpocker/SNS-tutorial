@@ -22,6 +22,14 @@ class Comment extends Model
 
     public function user()
     {
+        //userとcommentは1対多の関係
         return $this->belongsTo(User::class);
+    }
+
+    public function getComments(Int $tweet_id)
+    {
+        //userとcommentは1対多の関係
+        //where条件に合致するcommentと、それに紐づくuserのデータを取得
+        return $this->with('user')->where('tweet_id', $tweet_id)->get();
     }
 }

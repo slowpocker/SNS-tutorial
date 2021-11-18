@@ -31,5 +31,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('users/{user}/follow', 'UsersController@follow')->name('follow');
     // フォロー解除
     Route::delete('users/{user}/unfollow', 'UsersController@unfollow')->name('unfollow');
-
+    //ツイート関連
+    Route::resource('tweets', TweetsController::class, ['only' => ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']]);
 });
