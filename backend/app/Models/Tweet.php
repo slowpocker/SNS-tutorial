@@ -59,4 +59,14 @@ class Tweet extends Model
         //first()の戻り値はModelのオブジェクト
         return $this->with('user')->where('id', $tweet_id)->first();
     }
+
+    public function tweetStore(Int $user_id, Array $data)
+    {
+        //ツイートを保存する
+        $this->user_id = $user_id;
+        $this->text = $data['text'];
+        $this->save();
+
+        return;
+    }
 }
