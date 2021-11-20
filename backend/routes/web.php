@@ -23,7 +23,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // ログイン状態
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => 'auth'], function () {
 
     // ユーザ関連
     Route::resource('users', UsersController::class, ['only' => ['index', 'show', 'edit', 'update']]);
@@ -33,4 +33,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::delete('users/{user}/unfollow', 'UsersController@unfollow')->name('unfollow');
     //ツイート関連
     Route::resource('tweets', TweetsController::class, ['only' => ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']]);
+    // コメント関連
+    Route::resource('comments', CommentsController::class, ['only' => ['store']]);
 });

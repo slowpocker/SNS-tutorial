@@ -32,4 +32,15 @@ class Comment extends Model
         //where条件に合致するcommentと、それに紐づくuserのデータを取得
         return $this->with('user')->where('tweet_id', $tweet_id)->get();
     }
+
+    //コメントのデータを＄dataとして受け取る
+    public function commentStore(Int $user_id, Array $data)
+    {
+        $this->user_id = $user_id;
+        $this->tweet_id = $data['tweet_id'];
+        $this->text = $data['text'];
+        $this->save();
+
+        return;
+    }
 }
