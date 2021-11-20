@@ -9,11 +9,7 @@ use App\Models\Follower;
 
 class TweetsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index(Tweet $tweet, Follower $follower)
     {
         $user = auth()->user();
@@ -31,11 +27,7 @@ class TweetsController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         $user = auth()->user();
@@ -45,12 +37,7 @@ class TweetsController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request, Tweet $tweet)
     {
         $user = auth()->user();
@@ -69,12 +56,6 @@ class TweetsController extends Controller
         return redirect('tweets');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show(Tweet $tweet, Comment $comment)
     {
         $user = auth()->user();
@@ -90,35 +71,38 @@ class TweetsController extends Controller
 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function edit(Tweet $tweet)
     {
-        //
+        $user = auth()->user();
+        $tweets = $tweet->getEditTweet($user->id, $tweet->id);
+
+        if (!isset($tweets)) {
+            return redirect('tweets');
+        }
+
+        return view('tweets.edit', [
+            'user'   => $user,
+            'tweets' => $tweets
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update(Request $request, Tweet $tweet)
     {
-        //
+        $data = $request->validate([
+            'text' => ['required', 'string', 'max:140'],
+        ]);
+        // $data = $request->all();
+        // $validator = Validator::make($data, [
+        //     'text' => ['required', 'string', 'max:140']
+        // ]);
+
+        // $validator->validate();
+        $tweet->tweetUpdate($tweet->id, $data);
+
+        return redirect('tweets');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
         //
