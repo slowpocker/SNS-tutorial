@@ -103,8 +103,11 @@ class TweetsController extends Controller
     }
 
 
-    public function destroy($id)
+    public function destroy(Tweet $tweet)
     {
-        //
+        $user = auth()->user();
+        $tweet->tweetDestroy($user->id, $tweet->id);
+
+        return back();
     }
 }

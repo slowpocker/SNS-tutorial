@@ -56,7 +56,7 @@ class Tweet extends Model
     // 詳細画面
     public function getTweet(Int $tweet_id)
     {
-        //first()の戻り値はModelのオブジェクト
+        //first()の戻り値はTweetクラスのオブジェクト
         return $this->with('user')->where('id', $tweet_id)->first();
     }
 
@@ -82,5 +82,11 @@ class Tweet extends Model
         $this->update();
 
         return;
+    }
+
+    public function tweetDestroy(Int $user_id, $tweet_id)
+    {
+        //delete:影響を与えたレコード数が戻り値となる
+        return $this->where('user_id', $user_id)->where('id', $tweet_id)->delete();
     }
 }
