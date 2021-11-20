@@ -35,4 +35,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('tweets', TweetsController::class, ['only' => ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']]);
     // コメント関連
     Route::resource('comments', CommentsController::class, ['only' => ['store']]);
+    // いいね関連
+    Route::resource('favorites', 'FavoritesController', ['only' => ['store', 'destroy']]);
 });

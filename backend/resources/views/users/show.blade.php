@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="d-inline-flex">
                     <div class="p-3 d-flex flex-column">
-                        <img src="{{ $user->profile_image }}" class="rounded-circle" width="100" height="100">
+                        <img src="{{ asset('storage/profile_image/' .$user->profile_image) }}" class="rounded-circle" width="100" height="100">
                         <div class="mt-3 d-flex flex-column">
                             <h4 class="mb-0 font-weight-bold">{{ $user->name }}</h4>
                             <span class="text-secondary">{{ $user->screen_name }}</span>
@@ -20,14 +20,14 @@
                                     <a href="{{ url('users/' .$user->id .'/edit') }}" class="btn btn-primary">プロフィールを編集する</a>
                                 @else
                                     @if ($is_following)
-                                        <form action="{{ route('unfollow', ['id' => $user->id]) }}" method="POST">
+                                        <form action="{{ route('unfollow', ['id' => $user->id]) }}" method="POST" class="mb-2">
                                             {{ csrf_field() }}
                                             {{ method_field('DELETE') }}
 
                                             <button type="submit" class="btn btn-danger">フォロー解除</button>
                                         </form>
                                     @else
-                                        <form action="{{ route('follow', ['id' => $user->id]) }}" method="POST">
+                                        <form action="{{ route('follow', ['id' => $user->id]) }}" method="POST" class="mb-2">
                                             {{ csrf_field() }}
 
                                             <button type="submit" class="btn btn-primary">フォローする</button>
@@ -63,7 +63,7 @@
                 <div class="col-md-8 mb-3">
                     <div class="card">
                         <div class="card-haeder p-3 w-100 d-flex">
-                            <img src="{{ $user->profile_image }}" class="rounded-circle" width="50" height="50">
+                            <img src="{{ asset('storage/profile_image/' .$user->profile_image) }}" class="rounded-circle" width="50" height="50">
                             <div class="ml-2 d-flex flex-column flex-grow-1">
                                 <p class="mb-0">{{ $timeline->user->name }}</p>
                                 <a href="{{ url('users/' .$timeline->user->id) }}" class="text-secondary">{{ $timeline->user->screen_name }}</a>
@@ -92,14 +92,30 @@
                                     </div>
                                 </div>
                             @endif
+
                             <div class="mr-3 d-flex align-items-center">
-                                <a href="#"><i class="far fa-comment fa-fw"></i></a>
+                                <a href="{{ url('tweets/' .$timeline->id) }}"><i class="far fa-comment fa-fw"></i></a>
                                 <p class="mb-0 text-secondary">{{ count($timeline->comments) }}</p>
                             </div>
                             <div class="d-flex align-items-center">
-                                <a href="#"><i class="far fa-comment fa-fw"></i></a>
+                                @if (!in_array(Auth::user()->id, array_column($timeline->favorites->toArray(), 'user_id'), TRUE))
+                                    <form method="POST" action="{{ url('favorites/') }}" class="mb-0">
+                                        @csrf
+
+                                        <input type="hidden" name="tweet_id" value="{{ $timeline->id }}">
+                                        <button type="submit" class="btn p-0 border-0 text-primary"><i class="far fa-heart fa-fw"></i></button>
+                                    </form>
+                                @else
+                                    <form method="POST"action="{{ url('favorites/' .array_column($timeline->favorites->toArray(), 'id', 'user_id')[Auth::user()->id]) }}" class="mb-0">
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button type="submit" class="btn p-0 border-0 text-danger"><i class="fas fa-heart fa-fw"></i></button>
+                                    </form>
+                                @endif
                                 <p class="mb-0 text-secondary">{{ count($timeline->favorites) }}</p>
                             </div>
+
                         </div>
                     </div>
                 </div>
